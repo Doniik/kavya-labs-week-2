@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme {
+  --font-heading: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --color-ink: #1b1f4b;
+  --color-night: #14173a;
+  --color-deep: #0d0f2b;
+  --color-brand: #4f46e5;
+  --color-muted: #555b86;
+  --color-line: #dcdff0;
+  --color-tint: #f3f4fc;
+  --color-accent: #e8a317;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+body { font-family: var(--font-body); font-size: 17px; line-height: 1.6; color: var(--color-ink); background: #fff; }
+::selection { background: var(--color-accent); color: var(--color-ink); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
