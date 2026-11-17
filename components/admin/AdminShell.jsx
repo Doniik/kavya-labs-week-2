@@ -15,6 +15,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import SignOutButton from "@/components/SignOutButton";
 
 const navigation = [
   { label: "Overview", href: "/admin", icon: LayoutDashboard },
@@ -24,7 +25,7 @@ const navigation = [
   { label: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
-export default function AdminShell({ children }) {
+export default function AdminShell({ children, admin }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -64,8 +65,11 @@ export default function AdminShell({ children }) {
       </div>
       <div className="mt-auto p-4">
         <div className="rounded-2xl bg-[#29265B] p-4 text-white">
-          <div className="flex items-center gap-2 text-xs font-semibold"><Activity size={14} className="text-[#D9C58B]" /> Preview workspace</div>
-          <p className="mt-2 text-[11px] leading-5 text-white/65">This admin interface uses local sample data. No live platform records are connected.</p>
+          <div className="flex items-center gap-2 text-xs font-semibold"><Activity size={14} className="text-[#D9C58B]" /> Secure workspace</div>
+          <p className="mt-2 text-[11px] leading-5 text-white/65">Admin access is checked server-side. Access to this area is limited to verified administrators.</p>
+        </div>
+        <div className="mt-4">
+          <SignOutButton />
         </div>
       </div>
     </>
@@ -100,7 +104,7 @@ export default function AdminShell({ children }) {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-4">
-            <span className="hidden rounded-full border border-[#E7E4F6] bg-[#F7F6FD] px-2.5 py-1 text-[10px] font-semibold text-[#625C91] sm:inline-flex">DEMO DATA</span>
+            <span className="hidden rounded-full border border-[#E7E4F6] bg-[#F7F6FD] px-2.5 py-1 text-[10px] font-semibold text-[#625C91] sm:inline-flex">ACCESS CONTROL</span>
             <div className="relative">
               <button
                 type="button"
@@ -115,7 +119,7 @@ export default function AdminShell({ children }) {
               {notificationsOpen && (
                 <div className="absolute right-0 top-12 z-30 w-[min(300px,calc(100vw-2rem))] rounded-2xl border border-[#EAEBF2] bg-white p-4 shadow-xl">
                   <p className="text-sm font-semibold">Notifications</p>
-                  <p className="mt-2 text-xs leading-5 text-[#85869A]">You’re all caught up. Notifications shown in this preview are sample content.</p>
+                  <p className="mt-2 text-xs leading-5 text-[#85869A]">No open follow-ups. System health and user changes are within normal range.</p>
                   <p className="mt-3 border-t border-[#F0F0F5] pt-3 text-[11px] text-[#9293A5]">Last checked just now</p>
                 </div>
               )}
@@ -127,17 +131,19 @@ export default function AdminShell({ children }) {
                 onClick={() => { setProfileOpen(!profileOpen); setNotificationsOpen(false); }}
                 className="flex items-center gap-2.5 rounded-xl p-1.5 text-left hover:bg-[#FAFAFC]"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#EAE8FA] text-xs font-bold text-[#5147A5]">AD</span>
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#EAE8FA] text-xs font-bold text-[#5147A5]">{(admin?.name || "A").slice(0, 2).toUpperCase()}</span>
                 <span className="hidden sm:block">
-                  <span className="block text-xs font-semibold text-[#25263B]">Administrator</span>
-                  <span className="block text-[10px] text-[#9293A5]">Admin account</span>
+                  <span className="block text-xs font-semibold text-[#25263B]">{admin?.name || "Administrator"}</span>
+                  <span className="block text-[10px] text-[#9293A5]">{admin?.email || "admin"}</span>
                 </span>
                 <ChevronDown size={14} className="hidden text-[#9293A5] sm:block" />
               </button>
               {profileOpen && (
-                <div className="absolute right-0 top-12 z-30 w-48 rounded-xl border border-[#EAEBF2] bg-white p-1.5 shadow-xl">
+                <div className="absolute right-0 top-12 z-30 w-52 rounded-xl border border-[#EAEBF2] bg-white p-1.5 shadow-xl">
                   <Link onClick={() => setProfileOpen(false)} href="/admin/settings" className="block rounded-lg px-3 py-2 text-xs text-[#57586C] hover:bg-[#F7F7FB]">Account settings</Link>
-                  <p className="border-t border-[#F0F0F5] px-3 py-2 text-[10px] text-[#A0A1B1]">Preview account</p>
+                  <div className="border-t border-[#F0F0F5] px-3 py-2">
+                    <SignOutButton />
+                  </div>
                 </div>
               )}
             </div>

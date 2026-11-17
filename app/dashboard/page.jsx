@@ -11,16 +11,26 @@ export default async function DashboardPage() {
   if (!session) redirect("/login");
 
   const { name, email, image } = session.user;
+  const adminRoleUnverified =
+    email?.toLowerCase() === process.env.ADMIN_EMAIL?.toLowerCase() &&
+    session.user.role !== "ADMIN";
 
   return (
     <main className="min-h-screen bg-tint">
       <header className="border-b border-line bg-white">
-        <div className="mx-auto flex max-w-[1080px] items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-[1080px] items-center justify-between gap-4 px-6 py-4">
           <Link href="/" className="flex items-center gap-2 font-heading text-xl font-bold no-underline">
             <span className="h-2.5 w-2.5 rounded-full bg-accent" aria-hidden="true" />
             Kavya Labs
           </Link>
-          <SignOutButton />
+          <div className="flex items-center gap-3">
+            {session.user.role === "ADMIN" && (
+              <Link href="/admin" className="rounded-full bg-ink px-4 py-2 text-sm font-medium text-white transition hover:bg-ink/85">
+                Admin Dashboard
+              </Link>
+            )}
+            <SignOutButton />
+          </div>
         </div>
       </header>
       <section className="mx-auto max-w-[1080px] px-6 py-16">
@@ -34,6 +44,11 @@ export default async function DashboardPage() {
             <p className="text-muted">Signed in as {email}</p>
           </div>
         </div>
+        {adminRoleUnverified && (
+          <p role="status" className="mt-5 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+            Administrator access could not be verified. Check the database connection and your user&apos;s administrator role.
+          </p>
+        )}
         <p className="mt-6 text-muted">
           You're signed in with Google. This page is only visible to signed-in users.
         </p>

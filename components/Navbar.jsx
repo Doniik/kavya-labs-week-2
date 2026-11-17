@@ -15,8 +15,9 @@ const links = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("");
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const signedIn = status === "authenticated";
+  const isAdmin = signedIn && session?.user?.role === "ADMIN";
 
   useEffect(() => {
     if (!("IntersectionObserver" in window)) return;
@@ -34,6 +35,7 @@ export default function Navbar() {
   const authLinks = signedIn ? (
     <>
       <Link href="/dashboard" className={`${btnPrimary} !py-2`}>Dashboard</Link>
+      {isAdmin && <Link href="/admin" className={`text-white/85 hover:text-white ${focus}`}>Admin Dashboard</Link>}
       <button type="button" onClick={() => signOut({ callbackUrl: "/" })} className={`cursor-pointer text-white/70 hover:text-white ${focus}`}>
         Sign out
       </button>
@@ -83,6 +85,7 @@ export default function Navbar() {
           {signedIn ? (
             <>
               <Link href="/dashboard" onClick={() => setOpen(false)} className={`${btnPrimary} mt-2 text-center`}>Dashboard</Link>
+              {isAdmin && <Link href="/admin" onClick={() => setOpen(false)} className={`py-2 text-lg text-white/85 ${focus}`}>Admin Dashboard</Link>}
               <button type="button" onClick={() => signOut({ callbackUrl: "/" })} className={`py-2 text-left text-lg text-white/85 ${focus}`}>Sign out</button>
             </>
           ) : (
